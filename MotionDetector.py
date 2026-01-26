@@ -8,7 +8,7 @@ class DetectorParameters:
     def __init__(self):
         self.threshold = 25
         self.accumulate_alpha = 0.2
-        self.post_threshold_dilate_iterations = 2
+        self.post_threshold_erode_iterations = 2
         self.blur_size = 21
 
     def load_from_dict(self, d : dict):
@@ -25,8 +25,7 @@ class Diags:
         self.background = None
         self.frame_delta = None
         self.threshold = None
-        self.threshold_after_dilate = None
-        self.how_much_changed = None
+        self.threshold_after_erode = None
 
     def items(self):
         return self.__dict__.items()
@@ -48,13 +47,10 @@ class Detector:
 
         diags = Diags()
 
-        print(gray[0, 0], self._background[0, 0])
-
-        print(f"type(gray)={type(gray)}, type(_background)={type(self._background)}")
-
         # Update running average: weighted sum
         cv2.accumulateWeighted(gray, self._background, self.dp.accumulate_alpha)
         diags.background = self._background
+
         # Convert back to uint8 for difference calculation
         frame_delta = cv2.absdiff(gray, cv2.convertScaleAbs(self._background))
         diags.frame_delta = frame_delta
@@ -63,10 +59,8 @@ class Detector:
         thresh = cv2.threshold(frame_delta, self.dp.threshold, 255, cv2.THRESH_BINARY)[1]
         diags.threshold = thresh
 
-        thresh = cv2.dilate(thresh, None, iterations=self.dp.post_threshold_dilate_iterations)
-        diags.threshold_after_dilate = thresh
-
-        diags.how_much_changed = np.mean(diags.threshold)
+        thresh = cv2.erode(thresh, None, iterations=self.dp.post_threshold_erode_iterations)
+        diags.threshold_after_erode = thresh
 
         return True, diags
 
