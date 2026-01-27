@@ -13,10 +13,9 @@ import YieldImageFrames
 def main():
     os.environ['QT_QPA_FONTDIR'] = '/usr/share/fonts/truetype/dejavu/'
 
-    detector_parameters = MotionDetector.DetectorParameters()
-    detector_parameters.blur_size = 3
-    detector_parameters.post_threshold_erode_iterations = 1
-    detector = MotionDetector.Detector(detector_parameters)
+    dp = {"blur_size": 3, "post_threshold_erode_iterations": 1}
+    detector = MotionDetector.Detector(**dp)
+    print(detector.__dict__)
 
     # Replace 'your_image_directory' with the path to your image folder
     image_dir = 'testing/collected'
@@ -34,12 +33,13 @@ def main():
         # Scale both width and height by 50% (0.5)
         scale_factor = 0.25
 
-        # Use cv2.INTER_AREA for downscaling for best quality
-        frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_AREA)
+        if scale_factor != 1.0:
+            # Use cv2.INTER_AREA for downscaling for best quality
+            frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_AREA)
 
         cv2.imshow("Frame", frame)
 
-        tf, diags = detector.process_frame(frame)
+        diags = detector.process_frame(frame)
 
         if diags is not None:
             frame2 = frame.copy()

@@ -4,22 +4,6 @@ import cv2
 import numpy as np
 
 
-class DetectorParameters:
-    def __init__(self):
-        self.threshold = 25
-        self.accumulate_alpha = 0.2
-        self.post_threshold_erode_iterations = 2
-        self.blur_size = 21
-
-    def load_from_dict(self, d : dict):
-        for k, v in d.items():
-            if hasattr(self, k):
-                setattr(self, k, v)
-
-    def __repr__(self):
-        return str(vars(self))
-
-
 class Diags:
     def __init__(self):
         self.background = None
@@ -32,23 +16,31 @@ class Diags:
 
 
 class Detector:
-    def __init__(self, detector_parameters : DetectorParameters = None):
-        self.dp = detector_parameters
+    def __init__(self,
+                 threshold: int = 25,
+                 accumulate_alpha: float = 0.2,
+                 post_threshold_erode_iterations: int = 1,
+                 blur_size: int = 3,
+                 **kwargs):
         self._background = None
+        self._dp_threshold = threshold
+        self._dp_accumulate_alpha = accumulate_alpha
+        self._dp_post_threshold_erode_iterations = post_threshold_erode_iterations
+        self._dp_blur_size = blur_size
 
-    def process_frame(self, frame = None):
+    def process_frame(self, frame: np.ndarray):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (self.dp.blur_size, self.dp.blur_size), 0)  # Reduce noise
+        gray = cv2.GaussianBlur(gray, (self._dp_blur_size, self._dp_blur_size), 0)  # Reduce noise
 
         # Initialize running average
         if self._background is None:
             self._background = gray.copy().astype("float")
-            return False, None
+            return None
 
         diags = Diags()
 
         # Update running average: weighted sum
-        cv2.accumulateWeighted(gray, self._background, self.dp.accumulate_alpha)
+        cv2.accumulateWeighted(gray, self._background, self._dp_accumulate_alpha)
         diags.background = self._background
 
         # Convert back to uint8 for difference calculation
@@ -56,19 +48,14 @@ class Detector:
         diags.frame_delta = frame_delta
 
         # Threshold the image
-        thresh = cv2.threshold(frame_delta, self.dp.threshold, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.threshold(frame_delta, self._dp_threshold, 255, cv2.THRESH_BINARY)[1]
         diags.threshold = thresh
 
-        thresh = cv2.erode(thresh, None, iterations=self.dp.post_threshold_erode_iterations)
+        thresh = cv2.erode(thresh, None, iterations=self._dp_post_threshold_erode_iterations)
         diags.threshold_after_erode = thresh
 
-        return True, diags
+        return diags
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-
-    dp = DetectorParameters()
-    logging.info("dp 0: %s %s", dp, repr(dp))
-    dp.load_from_dict({"a": 1, "threshold": 25})
-    logging.info("dp 1: %s %s", dp, repr(dp))
