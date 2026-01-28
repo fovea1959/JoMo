@@ -9,6 +9,7 @@ class MotionDetector1Result:
         self.frame_delta = None
         self.threshold = None
         self.threshold_after_erode = None
+        self.derived_data_is_valid = False
 
     def items(self):
         return self.__dict__.items()
@@ -40,6 +41,15 @@ class MotionDetector1:
         # Initialize running average
         if self._background is None:
             self._background = gray.copy().astype("float")
+
+            height, width, channels = frame.shape
+            fill_color = (255, 0, 0)
+            block = np.zeros((height, width, 3), np.uint8)
+            block[:] = fill_color
+
+            rv.frame_delta = block
+            rv.threshold = block
+            rv.threshold_after_erode = block
         else:
             # Update running average: weighted sum
             cv2.accumulateWeighted(gray, self._background, self._dp_accumulate_alpha)
@@ -55,6 +65,8 @@ class MotionDetector1:
 
             thresh = cv2.erode(thresh, None, iterations=self._dp_post_threshold_erode_iterations)
             rv.threshold_after_erode = thresh
+
+            rv.derived_data_is_valid = True
 
         return rv
 
