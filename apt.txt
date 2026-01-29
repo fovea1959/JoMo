@@ -1,0 +1,7 @@
+nice to have:
+apt install gh git screen vim python3-venv lsof
+
+needed to build python dependencies:
+apt install python3-opencv
+apt install libcap-dev
+apt install libpython3-dev
