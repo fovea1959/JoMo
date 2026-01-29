@@ -1,9 +1,27 @@
 <html>
   <head>
     <title>Video Streaming Demonstration</title>
+    <style>
+.image-container {
+  display: flex;          /* Enables flexbox layout for children */
+  gap: 10px;              /* Adds space between the images */
+  width: 100%;            /* Container takes full width of its parent */
+}
+
+.image-container img {
+  flex: 1;                /* Allows each image to grow and take equal space */
+  width: 100%;            /* Ensures the image can use the full width allocated by flex */
+  height: 100%;           /* Ensures the image uses the full height of the container */
+  object-fit: cover;      /* Scales the image to cover the container while maintaining aspect ratio, cropping if necessary */
+  max-width: 100%;        /* Ensures images are responsive and don't exceed container width */
+}
+    </style>
   </head>
   <body>
     <h1>Video Streaming Demonstration</h1>
-    <img src="{{ url_for('video_feed') }}">
+    <div class="image-container">
+      <img src="{{ url_for('video_feed') }}">
+      <img src="{{ url_for('diff_feed') }}">
+    </div>
   </body>
 </html>

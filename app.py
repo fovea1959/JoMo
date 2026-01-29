@@ -1,12 +1,17 @@
 #!/usr/bin/env python
+
+# noinspection PyUnresolvedReferences
 import custom_logging
 
+import datetime
+import json
 import logging
 import time
 
 import cv2
 import numpy as np
 from flask import Flask, render_template, Response
+from PIL import Image
 
 import distributor
 import motion_detectors
@@ -18,13 +23,16 @@ app = Flask(__name__)
 
 def source():
     logging.info("Source is starting")
-    image_source = source_images_from_directory.ImageFrameSource(directory_path='testing/collected', extensions=['.jpg', '.jpeg'])
+    image_source = source_images_from_directory.ImageFrameSource(
+        directory_path='testing/collected',
+        extensions=['.jpg', '.jpeg']
+    )
     logging.info("Image source created")
     motion_detector = motion_detectors.MotionDetector1()
     while True:
         for image_and_info in image_source.yield_opencv_image_frames():
             image, info = image_and_info
-            logging.info ("got image %s", info)
+            logging.info("got image %s", info)
             mrt = motion_detector.process_frame(image)
 
             frame2 = mrt.frame.copy()
@@ -38,18 +46,42 @@ def source():
                 mrt.contour_area_ratio = sum(cv2.contourArea(contour) for contour in contours) / total_area
                 max_value = np.iinfo(t_frame.dtype).max
                 mrt.thresholded_area_ratio = np.mean(mrt.threshold_after_erode) / max_value
-                mrt.bounding_rects = []
 
+                hit = mrt.contour_area_ratio > 0.001
+
+                boxes = []
                 for contour in contours:
                     (x, y, w, h) = cv2.boundingRect(contour)
-                    mrt.bounding_rects.append((x, y, w, h))
-                    cv2.drawContours(frame2, contours, -1, (0, 255, 0), 1)
+                    boxes.append((x, y, w, h))
+                    # cv2.drawContours(frame2, contours, -1, (0, 255, 0), 1)
 
-                    if mrt.contour_area_ratio > 0.001:
+                    if hit:
                         cv2.rectangle(frame2, (x, y), (x + w, y + h), (255, 255, 0), 1)
 
+                if hit:
+                    jpeg_info = {
+                        "boxes": boxes,
+                    }
+                    jpeg_info_s = json.dumps(jpeg_info)
 
-            logging.info ("source yielding %s", mrt)
+                    # Convert from BGR to RGB
+                    img_rgb = cv2.cvtColor(mrt.frame, cv2.COLOR_BGR2RGB)
+                    # Convert NumPy array to PIL Image object
+                    pil_image = Image.fromarray(img_rgb)
+
+                    # Get the current UTC datetime (timezone-aware)
+                    utc_aware_dt = datetime.datetime.now(datetime.timezone.utc)
+
+                    # Convert to ISO 8601 format string (includes +00:00 offset)
+                    iso_format_str = utc_aware_dt.isoformat()
+
+                    print(f"UTC Datetime Object: {utc_aware_dt}")
+                    print(f"ISO 8601 String: {iso_format_str}")
+                    pil_image.save('output_path.jpg', comment=jpeg_info_s)
+
+            mrt.frame2 = frame2
+
+            logging.info("source yielding %s", mrt)
             yield mrt
             time.sleep(2)
 
@@ -65,11 +97,6 @@ def index():
     return render_template('index.html')
 
 
-def encode_cv_image_as_jpeg(im):
-    buffer = cv2.imencode('.jpg', im)[1]
-    return buffer.tobytes()
-
-
 def video_feed_gen(receiver: distributor.Receiver):
     """Video streaming generator function."""
     yield b'--frame\r\n'
@@ -77,7 +104,7 @@ def video_feed_gen(receiver: distributor.Receiver):
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
         logging.info("video_feed_gen received mrt %s %s", type(mrt), mrt)
-        frame_jpeg = encode_cv_image_as_jpeg(mrt.frame)
+        frame_jpeg = cv2.imencode('.jpg', mrt.frame2)[1].tobytes()
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 
 
@@ -96,7 +123,7 @@ def diff_feed_gen(receiver: distributor.Receiver):
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
         logging.info("video_feed_gen received mrt %s %s", type(mrt), mrt)
-        frame_jpeg = encode_cv_image_as_jpeg(mrt.threshold_after_erode)
+        frame_jpeg = cv2.imencode('.jpg', mrt.threshold_after_erode)[1].tobytes()
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 
 
@@ -109,5 +136,4 @@ def diff_feed():
 
 
 if __name__ == '__main__':
-    # logging.basicConfig(level=logging.INFO, stream=sys.stderr, format="%(threadName)s %(module)s %(funcName)s %(levelname)s %(message)s")
     app.run(host='0.0.0.0', threaded=True)

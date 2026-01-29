@@ -2,8 +2,6 @@ import logging
 import time
 import threading
 
-from typing import Iterator
-
 
 try:
     from greenlet import getcurrent as get_ident
@@ -68,7 +66,7 @@ class DistributorEvent(object):
 
 class Receiver:
     def __init__(self, distributor):
-        logger.info ("creating %s", self)
+        logger.info("creating %s", self)
         self.distributor = distributor
 
         distributor.start_background_thread()
@@ -89,7 +87,7 @@ class Receiver:
 
 
 class Distributor:
-    def __init__(self, source: Iterator = None, background_timeout: int = None):
+    def __init__(self, source=None, background_timeout: int = None):
         logger.info("creating %s", self)
         self.provider = source
         self.background_timeout = background_timeout

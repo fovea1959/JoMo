@@ -1,20 +1,19 @@
 import logging
 import os
-import time
 
 import cv2
 import numpy
 import numpy as np
 
-import MotionDetector
-import YieldImageFrames
+import motion_detectors
+import source_images_from_directory
 
 
 def main():
     os.environ['QT_QPA_FONTDIR'] = '/usr/share/fonts/truetype/dejavu/'
 
     dp = {"blur_size": 3, "post_threshold_erode_iterations": 1}
-    detector = MotionDetector.Detector(**dp)
+    detector = motion_detectors.MotionDetector1(**dp)
     print(detector.__dict__)
 
     # Replace 'your_image_directory' with the path to your image folder
@@ -22,15 +21,14 @@ def main():
     # Specify extensions if needed, or leave as None to attempt opening all files
     valid_extensions = ['.png', '.jpg', '.jpeg']
 
-    frame_source = YieldImageFrames.ImageFrameSource(image_dir, valid_extensions)
+    frame_source = source_images_from_directory.ImageFrameSource(image_dir, valid_extensions)
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(frame_source.yield_opencv_image_frames()):
         frame, info = frame_and_info
         print(f"Processing frame {i+1} {info}: Shape {frame.shape}, Data Type {frame.dtype}")
-        # Add your image processing logic here (e.g., OpenCV processing, model inference)
 
-        # Scale both width and height by 50% (0.5)
+        # Scale both width and height
         scale_factor = 0.25
 
         if scale_factor != 1.0:
@@ -76,7 +74,6 @@ def main():
                 else:
                     print(k, v)
 
-        k = None
         while True:
             k = cv2.waitKey(1)
             if k != -1:
