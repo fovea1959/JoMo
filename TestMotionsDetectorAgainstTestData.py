@@ -21,7 +21,7 @@ def main():
     # Specify extensions if needed, or leave as None to attempt opening all files
     valid_extensions = ['.png', '.jpg', '.jpeg']
 
-    frame_source = source_images_from_directory.ImageFrameSource(image_dir, valid_extensions)
+    frame_source = source_images_from_directory.SourceImagesFromFiles(image_dir, valid_extensions)
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(frame_source.yield_opencv_image_frames()):

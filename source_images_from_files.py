@@ -1,20 +1,21 @@
 import logging
 
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Tuple, Dict
 
 import cv2
 from PIL import Image
 import numpy as np
 
-import utilities
-
-logger = logging.getLogger("imageframesource")
-logger.setLevel(logging.INFO)
+import source_images
 
 
-class ImageFrameSource:
-    def __init__(self, directory_path: str, extensions: list = None):
+class FilesFrameSource(source_images.FrameSource):
+    def __init__(self, directory_path: str, extensions: list = None, level: int = logging.INFO, forever: bool = False):
+        super().__init__(level)
+
+        self.forever = forever
+
         p = Path(directory_path)
         if extensions:
             file_paths = []
@@ -51,7 +52,7 @@ class ImageFrameSource:
         cv2.putText(image, text, text_origin, font, font_scale, color, thickness, cv2.LINE_AA)
         return Image.fromarray(image)
 
-    def yield_pillow_image_frames(self) -> Generator[np.ndarray, None, None]:
+    def yield_pillow_image_frames(self) -> Generator[Tuple[Image, Dict], None, None]:
         """
         A generator function that iterates over image files in a directory
         and yields each image as a Pillow image.
@@ -59,7 +60,7 @@ class ImageFrameSource:
         Yields:
         An image frame as a Pillow image.
         """
-        logger.info("starting yield_pillow_image_frames")
+        self.logger.info("starting yield_pillow_image_frames")
         while True:
             yielded_something = False
             for file_path in self.file_paths:
@@ -67,39 +68,29 @@ class ImageFrameSource:
                     try:
                         # Open the image using Pillow (PIL)
                         with Image.open(file_path) as img:
-                            logger.debug("yielding image %s", file_path)
+                            self.logger.debug("yielding image %s", file_path)
                             yield img, {'path': file_path}
                             yielded_something = True
                     except IOError:
                         # Handle cases where a file might not be a valid image
-                        logger.error(f"Skipping non-image file: {file_path}")
+                        self.logger.error(f"Skipping non-image file: {file_path}")
 
             if not yielded_something:
-                logger.debug("yielding error frame")
+                self.logger.debug("yielding error frame")
                 yield self.error_frame, {'path': '** error frame **'}
 
-    def yield_opencv_image_frames(self) -> Generator[np.ndarray, None, None]:
-        """
-        A generator function that iterates over image files in a directory
-        and yields each image as a NumPy array (frame).
-
-        Yields:
-        An image frame as a OpenCV NumPy array.
-        """
-        logger.info("starting yield_opencv_image_frames")
-        for pillow_image_frame, info in self.yield_pillow_image_frames():
-            opencv_image_frame = utilities.make_cv2_from_pillow(pillow_image_frame)
-            yield opencv_image_frame, info
+            if not self.forever:
+                break
 
 
 # Example Usage:
 if __name__ == '__main__':
     # Replace 'your_image_directory' with the path to your image folder
-    image_dir = 'testing/collected'
+    image_dir = 'testing/123'
     # Specify extensions if needed, or leave as None to attempt opening all files
     valid_extensions = ['.png', '.jpg', '.jpeg']
 
-    image_source = ImageFrameSource(image_dir, valid_extensions)
+    image_source = FilesFrameSource(image_dir, valid_extensions)
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(image_source.yield_pillow_image_frames()):

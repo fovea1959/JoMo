@@ -16,7 +16,7 @@ from flask import Flask, render_template, Response
 
 import distributor
 import motion_detectors
-import source_images_from_directory
+import source_images
 import utilities
 
 app = Flask(__name__)
@@ -25,11 +25,8 @@ app = Flask(__name__)
 def source():
     logger = logging.getLogger("source")
     logger.setLevel(logging.INFO)
-    logger.info("Source is starting")
-    image_source = source_images_from_directory.ImageFrameSource(
-        directory_path='testing/collected',
-        extensions=['.jpg', '.jpeg']
-    )
+    logger.info("Creating image source")
+    image_source = source_images.fetch_frame_source()
     logger.info("Image source created")
     motion_detector = motion_detectors.MotionDetector1()
     while True:
