@@ -7,6 +7,8 @@ import cv2
 from PIL import Image
 import numpy as np
 
+import utilities
+
 logger = logging.getLogger("imageframesource")
 logger.setLevel(logging.INFO)
 
@@ -67,6 +69,7 @@ class ImageFrameSource:
                         with Image.open(file_path) as img:
                             logger.debug("yielding image %s", file_path)
                             yield img, {'path': file_path}
+                            yielded_something = True
                     except IOError:
                         # Handle cases where a file might not be a valid image
                         logger.error(f"Skipping non-image file: {file_path}")
@@ -85,8 +88,7 @@ class ImageFrameSource:
         """
         logger.info("starting yield_opencv_image_frames")
         for pillow_image_frame, info in self.yield_pillow_image_frames():
-            opencv_image_frame = np.array(pillow_image_frame)
-            opencv_image_frame = cv2.cvtColor(opencv_image_frame, cv2.COLOR_RGB2BGR)
+            opencv_image_frame = utilities.make_cv2_from_pillow(pillow_image_frame)
             yield opencv_image_frame, info
 
 
