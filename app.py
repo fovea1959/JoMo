@@ -22,17 +22,21 @@ app = Flask(__name__)
 
 
 def source():
-    logging.info("Source is starting")
+    logger = logging.getLogger("source")
+    logger.setLevel(logging.INFO)
+    logger.info("Source is starting")
     image_source = source_images_from_directory.ImageFrameSource(
         directory_path='testing/collected',
         extensions=['.jpg', '.jpeg']
     )
-    logging.info("Image source created")
+    logger.info("Image source created")
     motion_detector = motion_detectors.MotionDetector1()
     while True:
         for image_and_info in image_source.yield_opencv_image_frames():
             image, info = image_and_info
-            logging.info("got image %s", info)
+            logger.debug("got image %s", info)
+
+            # TODO: make sure we have consistent frame sizes across frames
             mrt = motion_detector.process_frame(image)
 
             frame2 = mrt.frame.copy()
@@ -81,7 +85,7 @@ def source():
 
             mrt.frame2 = frame2
 
-            logging.info("source yielding %s", mrt)
+            logger.debug("source yielding %s", mrt)
             yield mrt
             time.sleep(2)
 
@@ -103,7 +107,7 @@ def video_feed_gen(receiver: distributor.Receiver):
     while True:
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
-        logging.info("video_feed_gen received mrt %s %s", type(mrt), mrt)
+        logging.debug("video_feed_gen received mrt %s %s", type(mrt), mrt)
         frame_jpeg = cv2.imencode('.jpg', mrt.frame2)[1].tobytes()
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 
@@ -122,7 +126,7 @@ def diff_feed_gen(receiver: distributor.Receiver):
     while True:
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
-        logging.info("video_feed_gen received mrt %s %s", type(mrt), mrt)
+        logging.debug("video_feed_gen received mrt %s %s", type(mrt), mrt)
         frame_jpeg = cv2.imencode('.jpg', mrt.threshold_after_erode)[1].tobytes()
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 

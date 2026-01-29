@@ -1,3 +1,5 @@
+import logging
+
 from pathlib import Path
 from typing import Generator
 
@@ -6,7 +8,7 @@ from PIL import Image
 import numpy as np
 
 logger = logging.getLogger("imageframesource")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 
 class ImageFrameSource:
@@ -23,26 +25,29 @@ class ImageFrameSource:
         file_paths.sort()
         self.file_paths = file_paths
 
-        if len(file_paths) == 0:
-            width, height = 1024, 768
-            image = np.zeros((height, width, 3), np.uint8)
+        self.error_frame = self.make_error_frame(f"no valid images in {directory_path}")
 
-            text = f"Unable to find files in {directory_path}"
-            font = cv2.FONT_HERSHEY_SIMPLEX
-            font_scale = 1
-            color = (255, 255, 255)  # White color (BGR)
-            thickness = 1
+    @staticmethod
+    def make_error_frame(text):
+        width, height = 1024, 768
 
-            text_size, baseline = cv2.getTextSize(text, font, font_scale, thickness)
-            text_width, text_height = text_size
+        image = np.zeros((height, width, 3), np.uint8)
 
-            text_x = (width - text_width) // 2
-            text_y = (height + text_height) // 2
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale = 1
+        color = (255, 255, 255)  # White color (BGR)
+        thickness = 1
 
-            text_origin = (text_x, text_y)
+        text_size, baseline = cv2.getTextSize(text, font, font_scale, thickness)
+        text_width, text_height = text_size
 
-            cv2.putText(image, text, text_origin, font, font_scale, color, thickness, cv2.LINE_AA)
-            self.error_frame = Image.fromarray(image)
+        text_x = (width - text_width) // 2
+        text_y = (height + text_height) // 2
+
+        text_origin = (text_x, text_y)
+
+        cv2.putText(image, text, text_origin, font, font_scale, color, thickness, cv2.LINE_AA)
+        return Image.fromarray(image)
 
     def yield_pillow_image_frames(self) -> Generator[np.ndarray, None, None]:
         """
@@ -53,7 +58,8 @@ class ImageFrameSource:
         An image frame as a Pillow image.
         """
         logger.info("starting yield_pillow_image_frames")
-        if len(self.file_paths) > 0:
+        while True:
+            yielded_something = False
             for file_path in self.file_paths:
                 if file_path.is_file():
                     try:
@@ -64,9 +70,10 @@ class ImageFrameSource:
                     except IOError:
                         # Handle cases where a file might not be a valid image
                         logger.error(f"Skipping non-image file: {file_path}")
-        else:
-            yield self.error_frame, {'path': '** error frame **'}
 
+            if not yielded_something:
+                logger.debug("yielding error frame")
+                yield self.error_frame, {'path': '** error frame **'}
 
     def yield_opencv_image_frames(self) -> Generator[np.ndarray, None, None]:
         """

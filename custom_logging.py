@@ -26,7 +26,7 @@ class CustomLogFormatter(logging.Formatter):
         m = self.threadname_re.match(record.threadName)
         if m:
             record.threadName = m.group(1)
-        record.threadName = record.threadName[:30]
+        record.threadName = record.threadName[:20]
 
         result = super().format(record)
 
@@ -35,7 +35,7 @@ class CustomLogFormatter(logging.Formatter):
         return result
 
 h = logging.StreamHandler(stream=sys.stderr)
-logging_formatter = CustomLogFormatter('%(asctime)s %(levelname)-8s %(threadName)-30s %(module)-12s %(funcName)-12s %(message)s')
+logging_formatter = CustomLogFormatter('%(asctime)s %(levelname)-8s %(threadName)-20s %(module)-12s %(funcName)-12s %(message)s')
 h.setFormatter(logging_formatter)
 root_logger = logging.getLogger()
 root_logger.handlers.clear()

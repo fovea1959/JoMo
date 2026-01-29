@@ -2,23 +2,22 @@ import logging
 import time
 import threading
 
+ev_logger = logging.getLogger("distributor.events")
+ev_logger.setLevel(logging.INFO)
+logger = logging.getLogger("distributor")
+logger.setLevel(logging.INFO)
+
 
 try:
     from greenlet import getcurrent as get_ident
-    logging.info("imported greenlet")
+    logger.info("imported greenlet")
 except ImportError:
     try:
         from thread import get_ident
-        logging.info("imported thread")
+        logger.info("imported thread")
     except ImportError:
         from _thread import get_ident
-        logging.info("imported _thread")
-
-
-ev_logger = logging.getLogger("distributor.events")
-ev_logger.setLevel(logging.DEBUG)
-logger = logging.getLogger("distributor")
-logger.setLevel(logging.DEBUG)
+        logger.info("imported _thread")
 
 
 class DistributorEvent(object):
@@ -82,12 +81,12 @@ class Receiver:
         self.distributor.event.clear()
 
         rv = self.distributor.last_result
-        logging.info("returning %s %s", type(rv), rv)
+        logger.debug("returning %s %s", type(rv), rv)
         return rv
 
 
 class Distributor:
-    def __init__(self, source=None, background_timeout: int = None):
+    def __init__(self, source=None, background_timeout: int = None, start_background_immediately: bool = True):
         logger.info("creating %s", self)
         self.provider = source
         self.background_timeout = background_timeout
@@ -97,7 +96,8 @@ class Distributor:
         self.last_access = 0  # time of last client access to the source
         self.event = DistributorEvent()
 
-        self.start_background_thread()
+        if start_background_immediately:
+            self.start_background_thread()
 
     def start_background_thread(self):
         """Start the background thread if it isn't running yet."""
@@ -108,22 +108,23 @@ class Distributor:
             self.thread = threading.Thread(target=self._thread)
             self.thread.start()
 
-            # wait until first frame is available
-            ev_logger.debug("waiting for first event")
-            self.event.wait()
-            ev_logger.debug("got first event")
+            if self.last_result is None:
+                # wait until first frame is available
+                ev_logger.debug("waiting for first event")
+                self.event.wait()
+                ev_logger.debug("got first event")
         else:
-            logging.info("background thread is already running")
+            logger.info("background thread is already running")
 
     def get_receiver(self) -> Receiver:
         return Receiver(self)
 
     def _thread(self):
         """Camera background thread."""
-        logging.info('Started background thread: provider = %s', self.provider)
+        logger.info('Started background thread: provider = %s', self.provider)
         input_iterator = self.provider
         for result in input_iterator():
-            ev_logger.info("got %s, setting Distributor.event", type(result))
+            ev_logger.debug("got %s, setting Distributor.event", type(result))
             self.last_result = result
             self.event.set()  # send signal to clients
             time.sleep(0)
@@ -132,7 +133,7 @@ class Distributor:
             # the last 10 seconds then stop the thread
             if self.background_timeout is not None and (time.time() - self.last_access > self.background_timeout):
                 input_iterator.close()  # need to fix this
-                logging.info('Stopping background thread due to inactivity.')
+                logger.info('Stopping background thread due to inactivity.')
                 break
         self.thread = None
-        logging.info('Background thread is exiting.')
+        logger.info('Background thread is exiting.')
