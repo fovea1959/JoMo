@@ -3,17 +3,12 @@
 # noinspection PyUnresolvedReferences
 import custom_logging
 
-import datetime
-import json
 import logging
 import time
 
-import cv2
-import numpy as np
-import piexif
-
 from flask import Flask, render_template, Response
 
+import change_processor
 import distributor
 import motion_detectors
 import source_images
@@ -26,76 +21,18 @@ def source():
     logger = logging.getLogger("source")
     logger.setLevel(logging.INFO)
     logger.info("Creating image source")
-    image_source = source_images.fetch_frame_source()
+    frame_source = source_images.fetch_frame_source()
     logger.info("Image source created")
-    motion_detector = motion_detectors.MotionDetector1()
+
+    cp = change_processor.ChangeProcessor()
     while True:
-        for image_and_info in image_source.yield_opencv_image_frames():
-            image, info = image_and_info
+        for frame_and_info in frame_source.yield_opencv_image_frames():
+            frame, info = frame_and_info
             logger.debug("got image %s", info)
-
-            # TODO: make sure we have consistent frame sizes across frames
-            mrt = motion_detector.process_frame(image)
-
-            frame2 = mrt.frame.copy()
-            if mrt.derived_data_is_valid:
-                shape = frame2.shape
-                total_area = shape[0] * shape[1]
-
-                t_frame = mrt.threshold_after_erode
-
-                contours, _ = cv2.findContours(t_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                mrt.contour_area_ratio = sum(cv2.contourArea(contour) for contour in contours) / total_area
-                max_value = np.iinfo(t_frame.dtype).max
-                mrt.thresholded_area_ratio = np.mean(mrt.threshold_after_erode) / max_value
-
-                hit = mrt.contour_area_ratio > 0.001
-
-                boxes = []
-                for contour in contours:
-                    (x, y, w, h) = cv2.boundingRect(contour)
-                    boxes.append((x, y, w, h))
-                    # cv2.drawContours(frame2, contours, -1, (0, 255, 0), 1)
-
-                    if hit:
-                        cv2.rectangle(frame2, (x, y), (x + w, y + h), (255, 255, 0), 1)
-
-                if hit:
-                    jpeg_info = {
-                        "boxes": boxes,
-                    }
-                    jpeg_info_s = json.dumps(jpeg_info)
-
-                    # Define EXIF data dictionary (using standard numeric tags)
-                    exif_dict = {
-                        "0th": {
-                            piexif.ImageIFD.ImageDescription: "A generated image with metadata"
-                        },
-                        "Exif": {
-                            # piexif.ExifIFD.DateTimeOriginal: "2025:01:28 10:00:00",
-                            # piexif.ExifIFD.UserComment:
-                        },
-                        "GPS": {},  # Add GPS data here if needed
-                        "1st": {}
-                    }
-
-                    # Dump the dictionary to a raw EXIF byte string
-                    exif_bytes = piexif.dump(exif_dict)
-
-                    pil_image = utilities.make_pillow_from_cv2(mrt.frame)
-
-                    # Get the current UTC datetime (timezone-aware)
-                    utc_aware_dt = datetime.datetime.now(datetime.timezone.utc)
-                    ms = round(utc_aware_dt.microsecond / 1000)
-                    yyyymmddhhmmss = utc_aware_dt.strftime("%Y%m%d-%H%M%S")
-
-                    pil_image.save(f'output/{yyyymmddhhmmss}-{ms:03}.jpg', exif=exif_bytes)
-
-            mrt.frame2 = frame2
-
+            mrt = cp.process_frame(frame, info)
             logger.debug("source yielding %s", mrt)
             yield mrt
-            time.sleep(1)
+            time.sleep(10)  # PARAMETER!
 
 
 logging.info("Creating distributor")

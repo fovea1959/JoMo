@@ -1,19 +1,13 @@
 import logging
 
-import json
-import os
-import time
-
 from typing import Generator, Tuple, Dict
 
 from picamera2 import Picamera2, Preview
 from libcamera import Transform
 
 import numpy as np
-from PIL import Image
 
 import source_images
-import utilities
 
 logger = logging.getLogger("source_picam2")
 logger.setLevel(logging.INFO)
@@ -32,7 +26,7 @@ class PiCamera2FrameSource(source_images.FrameSource):
         )
         self.picam2.configure(capture_config)
 
-    def yield_pillow_image_frames(self) -> Generator[Tuple[Image, Dict], None, None]:
+    def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
         """
         A generator function that yields Pillow images from the Pi camera
 
@@ -42,7 +36,7 @@ class PiCamera2FrameSource(source_images.FrameSource):
         logger.info("starting yield_pillow_image_frames")
         self.picam2.start()
         while True:
-            img = self.picam2.capture_image()
+            img = self.picam2.capture_array()
             yield img, {}
 
         # self.picam2.close()

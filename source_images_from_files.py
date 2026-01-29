@@ -8,6 +8,7 @@ from PIL import Image
 import numpy as np
 
 import source_images
+import utilities
 
 
 class FilesFrameSource(source_images.FrameSource):
@@ -34,7 +35,7 @@ class FilesFrameSource(source_images.FrameSource):
     def make_error_frame(text):
         width, height = 1024, 768
 
-        image = np.zeros((height, width, 3), np.uint8)
+        frame = np.zeros((height, width, 3), np.uint8)
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 1
@@ -49,10 +50,10 @@ class FilesFrameSource(source_images.FrameSource):
 
         text_origin = (text_x, text_y)
 
-        cv2.putText(image, text, text_origin, font, font_scale, color, thickness, cv2.LINE_AA)
-        return Image.fromarray(image)
+        cv2.putText(frame, text, text_origin, font, font_scale, color, thickness, cv2.LINE_AA)
+        return frame
 
-    def yield_pillow_image_frames(self) -> Generator[Tuple[Image, Dict], None, None]:
+    def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
         """
         A generator function that iterates over image files in a directory
         and yields each image as a Pillow image.
@@ -69,7 +70,7 @@ class FilesFrameSource(source_images.FrameSource):
                         # Open the image using Pillow (PIL)
                         with Image.open(file_path) as img:
                             self.logger.debug("yielding image %s", file_path)
-                            yield img, {'path': file_path}
+                            yield utilities.make_cv2_from_pillow(img), {'path': file_path}
                             yielded_something = True
                     except IOError:
                         # Handle cases where a file might not be a valid image
@@ -91,11 +92,6 @@ if __name__ == '__main__':
     valid_extensions = ['.png', '.jpg', '.jpeg']
 
     image_source = FilesFrameSource(image_dir, valid_extensions)
-
-    # Iterate through the image frames using the generator
-    for i, frame_and_info in enumerate(image_source.yield_pillow_image_frames()):
-        frame, info = frame_and_info
-        print(f"Processing frame {i+1} {info}: Frame {frame}")
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(image_source.yield_opencv_image_frames()):
