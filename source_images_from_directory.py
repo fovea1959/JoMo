@@ -1,9 +1,14 @@
+import logging
+
 from pathlib import Path
 from typing import Generator
 
 import cv2
 from PIL import Image
 import numpy as np
+
+logger = logging.getLogger("imageframesource")
+logger.setLevel(logging.DEBUG)
 
 
 class ImageFrameSource:
@@ -22,21 +27,23 @@ class ImageFrameSource:
 
     def yield_pillow_image_frames(self) -> Generator[np.ndarray, None, None]:
         """
-         A generator function that iterates over image files in a directory
-         and yields each image as a Pillow image.
+        A generator function that iterates over image files in a directory
+        and yields each image as a Pillow image.
 
-         Yields:
-             An image frame as a Pillow image.
-         """
+        Yields:
+        An image frame as a Pillow image.
+        """
+        logger.info("starting yield_pillow_image_frames")
         for file_path in self.file_paths:
             if file_path.is_file():
                 try:
                     # Open the image using Pillow (PIL)
                     with Image.open(file_path) as img:
+                        logger.debug("yielding image %s", file_path)
                         yield img, {'path': file_path}
                 except IOError:
                     # Handle cases where a file might not be a valid image
-                    print(f"Skipping non-image file: {file_path}")
+                    logger.error(f"Skipping non-image file: {file_path}")
 
     def yield_opencv_image_frames(self) -> Generator[np.ndarray, None, None]:
         """
@@ -44,8 +51,9 @@ class ImageFrameSource:
         and yields each image as a NumPy array (frame).
 
         Yields:
-         An image frame as a OpenCV NumPy array.
+        An image frame as a OpenCV NumPy array.
         """
+        logger.info("starting yield_opencv_image_frames")
         for pillow_image_frame, info in self.yield_pillow_image_frames():
             opencv_image_frame = np.array(pillow_image_frame)
             opencv_image_frame = cv2.cvtColor(opencv_image_frame, cv2.COLOR_RGB2BGR)

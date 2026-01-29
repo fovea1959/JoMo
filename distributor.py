@@ -16,9 +16,9 @@ except ImportError:
 
 
 ev_logger = logging.getLogger("distributor.events")
-ev_logger.setLevel(logging.INFO)
+ev_logger.setLevel(logging.DEBUG)
 logger = logging.getLogger("distributor")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class DistributorEvent(object):
@@ -120,7 +120,7 @@ class Distributor:
 
     def _thread(self):
         """Camera background thread."""
-        logging.info('Starting background thread: provider = %s', self.provider)
+        logging.info('Started background thread: provider = %s', self.provider)
         input_iterator = self.provider
         for result in input_iterator():
             ev_logger.info("got %s, setting Distributor.event", type(result))
