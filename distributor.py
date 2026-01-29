@@ -7,11 +7,14 @@ from typing import Iterator
 
 try:
     from greenlet import getcurrent as get_ident
+    logging.info("imported greenlet")
 except ImportError:
     try:
         from thread import get_ident
+        logging.info("imported thread")
     except ImportError:
         from _thread import get_ident
+        logging.info("imported _thread")
 
 
 ev_logger = logging.getLogger("distributor.events")
