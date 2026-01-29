@@ -10,13 +10,14 @@ import time
 
 import cv2
 import numpy as np
+import piexif
+
 from flask import Flask, render_template, Response
-from PIL import Image
 
 import distributor
 import motion_detectors
 import source_images_from_directory
-
+import utilities
 
 app = Flask(__name__)
 
@@ -68,26 +69,36 @@ def source():
                     }
                     jpeg_info_s = json.dumps(jpeg_info)
 
-                    # Convert from BGR to RGB
-                    img_rgb = cv2.cvtColor(mrt.frame, cv2.COLOR_BGR2RGB)
-                    # Convert NumPy array to PIL Image object
-                    pil_image = Image.fromarray(img_rgb)
+                    # Define EXIF data dictionary (using standard numeric tags)
+                    exif_dict = {
+                        "0th": {
+                            piexif.ImageIFD.ImageDescription: "A generated image with metadata"
+                        },
+                        "Exif": {
+                            # piexif.ExifIFD.DateTimeOriginal: "2025:01:28 10:00:00",
+                            # piexif.ExifIFD.UserComment:
+                        },
+                        "GPS": {},  # Add GPS data here if needed
+                        "1st": {}
+                    }
+
+                    # Dump the dictionary to a raw EXIF byte string
+                    exif_bytes = piexif.dump(exif_dict)
+
+                    pil_image = utilities.make_pillow_from_cv2(mrt.frame)
 
                     # Get the current UTC datetime (timezone-aware)
                     utc_aware_dt = datetime.datetime.now(datetime.timezone.utc)
+                    ms = round(utc_aware_dt.microsecond / 1000)
+                    yyyymmddhhmmss = utc_aware_dt.strftime("%Y%m%d-%H%M%S")
 
-                    # Convert to ISO 8601 format string (includes +00:00 offset)
-                    iso_format_str = utc_aware_dt.isoformat()
-
-                    print(f"UTC Datetime Object: {utc_aware_dt}")
-                    print(f"ISO 8601 String: {iso_format_str}")
-                    pil_image.save('output_path.jpg', comment=jpeg_info_s)
+                    pil_image.save(f'output/{yyyymmddhhmmss}-{ms:03}.jpg', exif=exif_bytes)
 
             mrt.frame2 = frame2
 
             logger.debug("source yielding %s", mrt)
             yield mrt
-            time.sleep(2)
+            time.sleep(1)
 
 
 logging.info("Creating distributor")
@@ -108,7 +119,7 @@ def video_feed_gen(receiver: distributor.Receiver):
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
         logging.debug("video_feed_gen received mrt %s %s", type(mrt), mrt)
-        frame_jpeg = cv2.imencode('.jpg', mrt.frame2)[1].tobytes()
+        frame_jpeg = utilities.make_jpeg_from_cv2(mrt.frame2)
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 
 
@@ -127,7 +138,7 @@ def diff_feed_gen(receiver: distributor.Receiver):
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
         logging.debug("video_feed_gen received mrt %s %s", type(mrt), mrt)
-        frame_jpeg = cv2.imencode('.jpg', mrt.threshold_after_erode)[1].tobytes()
+        frame_jpeg = utilities.make_jpeg_from_cv2(mrt.threshold_after_erode)
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 
 

@@ -54,7 +54,7 @@ class DistributorEvent(object):
                 # if the event stays set for more than 5 seconds, then assume
                 # the client is gone and remove it
                 if now - event[1] > 5:
-                    remove = ident
+                    remove = ident  # TODO may want to get rid of all stale clients, not just one at a time
         if remove:
             del self.events[remove]
 
