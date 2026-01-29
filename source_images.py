@@ -41,15 +41,16 @@ def fetch_frame_source() -> FrameSource:
         try:
             import source_images_from_picamera2
             rv = source_images_from_picamera2.PiCamera2FrameSource()
-        except ImportError:
-            logging.error("Unable to instantiate camera")
+        except ImportError as exc:
+            logging.error("Unable to instantiate camera", exc_info=exc)
             source_images_from_picamera2 = None  # take care of warning message
     else:
         logging.info("not a pi!")
 
-    if not rv:
+    if rv is None:
         import source_images_from_files
         rv = source_images_from_files.FilesFrameSource("testing/123", forever=True)
+
     return rv
 
 

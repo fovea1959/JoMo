@@ -99,7 +99,7 @@ def source():
 
 
 logging.info("Creating distributor")
-image_distributor = distributor.Distributor(source=source)  # TODO
+image_distributor = distributor.Distributor(source=source)
 logging.info("Created distributor")
 
 
@@ -148,4 +148,4 @@ def diff_feed():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', threaded=True)
+    app.run(host='0.0.0.0', threaded=True)  ### , use_reloader=False)

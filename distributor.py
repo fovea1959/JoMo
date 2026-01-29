@@ -105,7 +105,7 @@ class Distributor:
             self.last_access = time.time()
 
             # start background frame thread
-            self.thread = threading.Thread(target=self._thread)
+            self.thread = threading.Thread(target=self._thread, daemon=True)
             self.thread.start()
 
             if self.last_result is None:
