@@ -23,7 +23,8 @@ def get_camera(name : str):
                 logger.debug("saw camera %d, '%s'", camera_info.index, camera_info.name)
                 if i_want is None:
                     if name in camera_info.name:
-                        logger.info ("found camera '%s'", camera_info.name)
+                        logger.info ("found camera '%s': %s:%d", camera_info.name,
+                                     getBackendName(camera_info.backend), camera_info.index)
                         i_want = camera_info
 
     if i_want is not None:

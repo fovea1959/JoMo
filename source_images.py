@@ -22,6 +22,7 @@ class FrameSource:
 
 
 def fetch_frame_source() -> FrameSource:
+    # choice of input should be a PARAMETER! ?
     rv = None
     raspberry_pi = 'rpi' in getattr(platform.uname(), 'release')
     if raspberry_pi:

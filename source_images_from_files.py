@@ -56,10 +56,10 @@ class FilesFrameSource(source_images.FrameSource):
     def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
         """
         A generator function that iterates over image files in a directory
-        and yields each image as a Pillow image.
+        and yields each image as an opencv image.
 
         Yields:
-        An image frame as a Pillow image.
+        An image frame as a opencv image.
         """
         self.logger.info("starting yield_pillow_image_frames")
         while True:

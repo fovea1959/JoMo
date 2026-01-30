@@ -1,3 +1,6 @@
+import json
+from datetime import datetime, date
+
 from PIL import Image
 import cv2
 import numpy as np
@@ -11,8 +14,8 @@ def make_pillow_from_cv2(cv2_image):
     return pil_image
 
 
-def make_jpeg_from_cv2(cv2_image):
-    return cv2.imencode('.jpg', cv2_image)[1].tobytes()
+def make_jpeg_from_cv2(cv2_image, quality: int = 75):
+    return cv2.imencode('.jpg', cv2_image, [cv2.IMWRITE_JPEG_QUALITY, quality])[1].tobytes()
 
 
 def make_cv2_from_pillow(pil_image):
@@ -26,7 +29,7 @@ def make_cv2_from_pillow(pil_image):
 # Retrieved 2026-01-29, License - CC BY-SA 4.0
 def add_text_to_image(
     frame: np.ndarray,
-    label: str,
+    text: str,
     top_left_xy: tuple = (0, 0),
     font_scale: float = 1,
     font_thickness: int = 1,
@@ -46,7 +49,7 @@ def add_text_to_image(
 
     im_h, im_w = frame.shape[:2]
 
-    for line in label.splitlines():
+    for line in text.splitlines():
         x, y = top_left_xy
 
         # ====== get text size
@@ -111,3 +114,9 @@ def add_text_to_image(
 
     return frame
 
+
+def json_serializer(obj):
+    """JSON serializer for objects not serializable by default json code"""
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat() # Converts to ISO 8601 format (e.g., "YYYY-MM-DDTHH:MM:SS")
+    raise TypeError(f"Type {type(obj).__name__} not serializable")

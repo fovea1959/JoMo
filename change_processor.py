@@ -5,6 +5,7 @@ import logging
 import cv2
 import numpy as np
 import piexif
+import piexif.helper
 
 import motion_detectors
 import utilities
@@ -30,6 +31,7 @@ class ChangeProcessor:
         now = datetime.datetime.now(datetime.timezone.utc)
         if timestamp is None:
             timestamp = now
+        info['processed'] = now.isoformat()
 
         # TODO: make sure we have consistent frame sizes across frames
         mrt = self.motion_detector.process_frame(frame)
@@ -50,7 +52,7 @@ class ChangeProcessor:
             max_value = np.iinfo(t_frame.dtype).max
             mrt.thresholded_area_ratio = np.mean(mrt.threshold_after_erode) / max_value
 
-            hit = mrt.contour_area_ratio > 0.001
+            hit = mrt.contour_area_ratio > 0.001  # PARAMETER!
 
             for contour in contours:
                 (x, y, w, h) = cv2.boundingRect(contour)
@@ -65,21 +67,37 @@ class ChangeProcessor:
             mrt.thresholded_area_ratio = 0
 
         info_dict = {
+            "source_info": info,
+            "contour_area_ratio": mrt.contour_area_ratio
+        }
+
+        detailed_info_dict = {
             "boxes": boxes,
         }
+
+        text = f"{timestamp.isoformat()}\r{now.isoformat()}\rChange ratio: {mrt.contour_area_ratio:.4f}"
+        if hit:
+            text += f"\rEvent {self.event_id}"
+        h, w = frame2.shape[:2]
+        utilities.add_text_to_image(frame=frame2, text=text, font_scale=0.5, top_left_xy=(h // 20, w // 20),
+                                    font_color_rgb=(255, 255, 255),
+                                    bg_color_rgb=(128, 128, 128))
 
         if hit:
             self.last_info_dict['event_id'] = info_dict['event_id'] = self.event_id
             if not self.in_event:
-                logger.info ("event %d is starting", self.event_id)
-                self.save_file(self.last_frame, self.last_timestamp, self.last_info_dict)
-            self.save_file(frame, timestamp, info_dict)
+                logger.info("event %d is starting", self.event_id)
+                self.save_file(self.last_frame, self.last_timestamp, info_dict=self.last_info_dict)
+            self.save_file(frame, timestamp, info_dict=info_dict, detailed_info_dict=detailed_info_dict)
+            self.save_file(frame2, timestamp, info_dict=info_dict, detailed_info_dict=detailed_info_dict, suffix="-q")
             self.in_event = True
         else:
             if self.in_event:
                 # event is ending
-                logger.info ("event %d is ending", self.event_id)
-                self.save_file(frame, timestamp, info_dict)
+                logger.info("event %d is ending", self.event_id)
+                self.save_file(frame, timestamp, info_dict=info_dict, detailed_info_dict=detailed_info_dict)
+                self.save_file(frame2, timestamp, info_dict=info_dict,
+                               detailed_info_dict=detailed_info_dict, suffix="-q")
                 self.event_id = self.event_id + 1
             else:
                 self.last_frame = frame
@@ -87,16 +105,12 @@ class ChangeProcessor:
                 self.last_timestamp = timestamp
             self.in_event = False
 
-        text = f"{timestamp.isoformat()} -> {now.isoformat()}, Change ratio: {mrt.contour_area_ratio:.4f}"
-        if hit:
-            text += f", event {self.event_id}"
-        self.draw_text(frame2, text)
-
         mrt.frame2 = frame2
 
         return mrt
 
-    def draw_text(self, frame: np.ndarray, text: str):
+    @staticmethod
+    def draw_text(frame: np.ndarray, text: str):
         height, width, channels = frame.shape
 
         font = cv2.FONT_HERSHEY_SIMPLEX
@@ -105,7 +119,7 @@ class ChangeProcessor:
         thickness = 1
 
         text_size, baseline = cv2.getTextSize(text, font, font_scale, thickness)
-        text_width, text_height = text_size
+        # text_width, text_height = text_size
 
         text_x = int(width * 0.1)
         text_y = int(height * 0.1)
@@ -114,29 +128,40 @@ class ChangeProcessor:
 
         cv2.putText(frame, text, text_origin, font, font_scale, color, thickness, cv2.LINE_AA)
 
-    def save_file(self, frame: np.ndarray, timestamp: datetime.datetime, info_dict: dict = None):
+    @staticmethod
+    def save_file(frame: np.ndarray, timestamp: datetime.datetime, info_dict: dict = None,
+                  detailed_info_dict: dict = None, description: str = None, suffix: str = ""):
         if info_dict is None:
             info_dict = {}
-        info_s = json.dumps(info_dict)
+        info_s = json.dumps(info_dict, default=utilities.json_serializer)
+        if detailed_info_dict is None:
+            detailed_info_dict = {}
+        detailed_info_s = json.dumps(detailed_info_dict, default=utilities.json_serializer)
 
         ms = round(timestamp.microsecond / 1000)
-        yyyymmddhhmmss = timestamp.strftime("%Y%m%d-%H%M%S")
 
         exif_dict = {
             "0th": {
-                piexif.ImageIFD.ImageDescription: "A generated image with metadata"
+                piexif.ImageIFD.ImageHistory: detailed_info_s.encode(),
             },
             "Exif": {
-                # piexif.ExifIFD.DateTimeOriginal: "2025:01:28 10:00:00",
-                # piexif.ExifIFD.UserComment:
+                piexif.ExifIFD.DateTimeOriginal: timestamp.strftime("%Y:%m:%d %H:%M:%S"),
+                piexif.ExifIFD.SubSecTimeOriginal: f"{ms:03}",
+                piexif.ExifIFD.OffsetTimeOriginal: "+00:00",
+                piexif.ExifIFD.UserComment: piexif.helper.UserComment.dump(info_s),
             },
-            "GPS": {},  # Add GPS data here if needed
-            "1st": {}
+            "GPS": {
+            },
+            "1st": {
+            }
         }
+        if description is not None:
+            exif_dict["0th"][piexif.ImageIFD.ImageDescription] = description.encode('ascii')
 
+        yyyymmddhhmmss = timestamp.strftime("%Y%m%d-%H%M%S")
         fn = f'{yyyymmddhhmmss}-{ms:03}'
 
         exif_bytes = piexif.dump(exif_dict)
         pil_image = utilities.make_pillow_from_cv2(frame)
         # output dir should be PARAMETER!
-        pil_image.save(f'output/{fn}.jpg', exif=exif_bytes)
+        pil_image.save(f'output/{fn}{suffix}.jpg', exif=exif_bytes, quality=95)

@@ -53,7 +53,7 @@ def video_feed_gen(receiver: distributor.Receiver):
         logging.debug("video_feed_gen waiting for mrt")
         mrt: motion_detectors.MotionDetector1Result = receiver.get_last_result()
         logging.debug("video_feed_gen received mrt %s %s", type(mrt), mrt)
-        frame_jpeg = utilities.make_jpeg_from_cv2(mrt.frame2)
+        frame_jpeg = utilities.make_jpeg_from_cv2(mrt.frame2, quality=95)
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame_jpeg + b'\r\n--frame\r\n'
 
 

@@ -33,6 +33,7 @@ def main():
             piexif.ImageIFD.XPComment: comments.encode('utf-16le'),
             piexif.ImageIFD.Make: 'Average Joes',
             piexif.ImageIFD.Model: 'JoMo',
+            piexif.ImageIFD.ImageHistory: "[ {} ]"
         },
         "Exif": {
             piexif.ExifIFD.DateTimeOriginal: "2025:01:28 10:00:00",
