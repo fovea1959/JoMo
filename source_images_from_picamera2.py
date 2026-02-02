@@ -29,7 +29,7 @@ class PiCamera2FrameSource(source_images.FrameSource):
         if hflip is not None:
             transform_parameters['hflip'] = hflip
         if len(transform_parameters) > 0:
-            capture_config_parameters['transform'] = transform_parameters
+            capture_config_parameters['transform'] = Transform(**transform_parameters)
 
         if resolution is not None:
             capture_config_parameters['main'] = { 'size': resolution }
@@ -39,7 +39,7 @@ class PiCamera2FrameSource(source_images.FrameSource):
         # print(json.dumps(picam2.sensor_modes, indent=1, default=lambda o: o.__dict__, sort_keys=True))
 
         logger.info ("Configuring picamera with %s", capture_config_parameters)
-        capture_config = self.picam2.create_still_configuration(capture_config_parameters)
+        capture_config = self.picam2.create_still_configuration(**capture_config_parameters)
         self.picam2.configure(capture_config)
 
     def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
