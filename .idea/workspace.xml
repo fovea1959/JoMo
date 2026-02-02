@@ -35,43 +35,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.MotionDetector.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TestMotionsDetectorAgainstTestData.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Test_Streaming.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Test_Webcam.executor&quot;: &quot;Run&quot;,
-    &quot;Python.YieldImageFrames.executor&quot;: &quot;Run&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;Python.camera_finder.executor&quot;: &quot;Run&quot;,
-    &quot;Python.source_images_from_files.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test01.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_opencv.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_piexif.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/wegscd/PycharmProjects/JoMo&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.MotionDetector.executor": "Run",
+    "Python.TestMotionsDetectorAgainstTestData.executor": "Run",
+    "Python.Test_Streaming.executor": "Run",
+    "Python.Test_Webcam.executor": "Run",
+    "Python.YieldImageFrames.executor": "Run",
+    "Python.app.executor": "Run",
+    "Python.camera_finder.executor": "Run",
+    "Python.configuration.executor": "Run",
+    "Python.source_images_from_files.executor": "Run",
+    "Python.test01.executor": "Run",
+    "Python.test_opencv.executor": "Run",
+    "Python.test_piexif.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/wegscd/PycharmProjects/JoMo/config",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
-      &quot;directory&quot;,
-      &quot;module&quot;,
-      &quot;repository&quot;
+  "keyToStringList": {
+    "GitStage.ChangesTree.GroupingKeys": [
+      "directory",
+      "module",
+      "repository"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/testing/123" />
       <recent name="$PROJECT_DIR$/testing/collected/skip" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.configuration">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
@@ -116,7 +119,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="source_images_from_files" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="configuration" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -129,7 +132,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source_images_from_files.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/configuration.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -184,11 +187,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.configuration" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.test_piexif" />
         <item itemvalue="Python.camera_finder" />
         <item itemvalue="Python.test_opencv" />
-        <item itemvalue="Python.source_images_from_files" />
       </list>
     </recent_temporary>
   </component>
@@ -320,7 +323,23 @@
       <option name="project" value="LOCAL" />
       <updated>1769815421324</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Beef up gitignore.">
+      <option name="closed" value="true" />
+      <created>1770045222376</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1770045222376</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Beef up gitignore.">
+      <option name="closed" value="true" />
+      <created>1770045281152</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1770045281152</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -348,6 +367,7 @@
     <MESSAGE value="Working on picamera." />
     <MESSAGE value="Refactor." />
     <MESSAGE value="exif, latency, camera finder." />
-    <option name="LAST_COMMIT_MESSAGE" value="exif, latency, camera finder." />
+    <MESSAGE value="Beef up gitignore." />
+    <option name="LAST_COMMIT_MESSAGE" value="Beef up gitignore." />
   </component>
 </project>
