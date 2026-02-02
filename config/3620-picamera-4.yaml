@@ -1,0 +1,8 @@
+info:
+  node: 3620-picamera-4
+
+input:
+  source: picamera
+  resolution: [1640, 1232]
+  vflip: on
+  hflip: on

@@ -1,0 +1,5 @@
+info:
+  machine: aarch64-rpi
+
+input:
+  source: picamera2

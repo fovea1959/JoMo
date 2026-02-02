@@ -1,0 +1,7 @@
+info:
+  node: wegscd-t480-l
+
+input:
+  source: opencv-camera
+  camera_name: Integrated
+  resolution: [1280, 720]

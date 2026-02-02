@@ -9,6 +9,7 @@ from libcamera import Transform
 
 import numpy as np
 
+import configuration
 import source_images
 
 logger = logging.getLogger("source_picam2")
@@ -16,19 +17,29 @@ logger.setLevel(logging.INFO)
 
 
 class PiCamera2FrameSource(source_images.FrameSource):
-    def __init__(self, level: int = logging.INFO):
-        super().__init__(level)
+    def __init__(self, log_level: int = logging.INFO, vflip: bool = None, hflip: bool = None, resolution=None, **kwargs):
+        super().__init__(log_level)
         self.picam2 = Picamera2()
 
-        # resolution & flip should be PARAMETER!
+        capture_config_parameters = {}
+
+        transform_parameters = {}
+        if vflip is not None:
+            transform_parameters['vflip'] = vflip
+        if hflip is not None:
+            transform_parameters['hflip'] = hflip
+        if len(transform_parameters) > 0:
+            capture_config_parameters['transform'] = transform_parameters
+
+        if resolution is not None:
+            capture_config_parameters['main'] = { 'size': resolution }
 
         # picam2.options['quality'] = 95
+
         # print(json.dumps(picam2.sensor_modes, indent=1, default=lambda o: o.__dict__, sort_keys=True))
-        # print("configuring", picam2)
-        capture_config = self.picam2.create_still_configuration(
-            main={'size': (3280 // 2, 2464 // 2)},  # PARAMETER!
-            transform=Transform(hflip=True, vflip=True)
-        )
+
+        logger.info ("Configuring picamera with %s", capture_config_parameters)
+        capture_config = self.picam2.create_still_configuration(capture_config_parameters)
         self.picam2.configure(capture_config)
 
     def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:

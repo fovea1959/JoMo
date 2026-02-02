@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import configuration
 # noinspection PyUnresolvedReferences
 import custom_logging
 
@@ -14,14 +14,16 @@ import motion_detectors
 import source_images
 import utilities
 
+configuration.configure()
 app = Flask(__name__)
 
 
 def source():
     logger = logging.getLogger("source")
     logger.setLevel(logging.INFO)
-    logger.info("Creating image source")
-    frame_source = source_images.fetch_frame_source()
+    input_args = configuration.settings.get('input', {})
+    logger.info("Creating image source with %s", input_args)
+    frame_source = source_images.fetch_frame_source(**input_args)
     logger.info("Image source created")
 
     cp = change_processor.ChangeProcessor()

@@ -15,15 +15,16 @@ logger.setLevel(logging.INFO)
 
 
 class OpenCVCameraImageSource(source_images.FrameSource):
-    def __init__(self, level: int = logging.INFO):
-        super().__init__(level)
-        camera_id, backend = camera_finder.get_camera('Integrated')  # PARAMETER!
+    def __init__(self, log_level: int = logging.INFO, camera_name: str = None, resolution = None, **kwargs):
+        super().__init__(log_level)
+        camera_id, backend = camera_finder.get_camera(camera_name)
         if camera_id is None:
-            raise Exception ("Cannot find camera")
+            raise Exception(f"Cannot find camera {camera_name}")
         self.cap = cv2.VideoCapture(camera_id, backend)
-        # Setting resolution
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280) # PARAMETER!
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+        if resolution is not None:
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, resolution[0])
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, resolution[1])
 
         # Get frame width and height
         width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))

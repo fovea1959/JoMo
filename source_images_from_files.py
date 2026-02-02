@@ -12,8 +12,8 @@ import utilities
 
 
 class FilesFrameSource(source_images.FrameSource):
-    def __init__(self, directory_path: str, extensions: list = None, level: int = logging.INFO, forever: bool = False):
-        super().__init__(level)
+    def __init__(self, directory_path: str = None, extensions: list = None, log_level: int = logging.INFO, forever: bool = False):
+        super().__init__(log_level)
 
         self.forever = forever
 
@@ -21,7 +21,7 @@ class FilesFrameSource(source_images.FrameSource):
         if extensions:
             file_paths = []
             for ext in extensions:
-                # Use rglob for recursive search, glob for single level
+                # Use rglob for recursive search, glob for single log_level
                 file_paths.extend(list(p.glob(f'*{ext}')))
         else:
             file_paths = list(p.glob('*'))  # Iterate through all files

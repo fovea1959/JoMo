@@ -74,7 +74,7 @@
       <recent name="$PROJECT_DIR$/testing/collected/skip" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.configuration">
+  <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
@@ -187,8 +187,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.configuration" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.configuration" />
         <item itemvalue="Python.test_piexif" />
         <item itemvalue="Python.camera_finder" />
         <item itemvalue="Python.test_opencv" />
@@ -339,7 +339,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770045281152</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Start adding configuration">
+      <option name="closed" value="true" />
+      <created>1770049884543</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1770049884543</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -368,6 +376,7 @@
     <MESSAGE value="Refactor." />
     <MESSAGE value="exif, latency, camera finder." />
     <MESSAGE value="Beef up gitignore." />
-    <option name="LAST_COMMIT_MESSAGE" value="Beef up gitignore." />
+    <MESSAGE value="Start adding configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start adding configuration" />
   </component>
 </project>

@@ -13,36 +13,31 @@ import utilities
 
 
 class FrameSource:
-    def __init__(self, level: int = logging.INFO):
+    def __init__(self, log_level: int = logging.INFO):
         self.logger = logging.getLogger(str(type(self)))
-        self.logger.setLevel(level)
+        self.logger.setLevel(log_level)
 
     def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
         pass
 
 
-def fetch_frame_source() -> FrameSource:
-    # choice of input should be a PARAMETER! ?
+def fetch_frame_source(source: str = None, **kwargs) -> FrameSource:
     rv = None
-    raspberry_pi = 'rpi' in getattr(platform.uname(), 'release')
-    if raspberry_pi:
-        try:
+
+    if source is not None:
+        if source.lower() == 'picamera':
             import source_images_from_picamera2
-            rv = source_images_from_picamera2.PiCamera2FrameSource()
-        except ImportError as exc:
-            logging.error("Unable to instantiate camera", exc_info=exc)
-            source_images_from_picamera2 = None  # take care of warning message
-    else:
-        try:
+            rv = source_images_from_picamera2.PiCamera2FrameSource(**kwargs)
+
+        if source.lower() == 'opencv-camera':
             import source_images_from_opencv_camera
-            rv = source_images_from_opencv_camera.OpenCVCameraImageSource()
-        except ImportError as exc:
-            logging.error("Unable to instantiate camera", exc_info=exc)
-            source_images_from_opencv_camera = None  # take care of warning message
+            rv = source_images_from_opencv_camera.OpenCVCameraImageSource(**kwargs)
+
+        if source.lower() == 'files':
+            import source_images_from_files
+            rv = source_images_from_files.FilesFrameSource(forever=True, **kwargs)
 
     if rv is None:
-        logging.warning("no camera, so using 123 images")
-        import source_images_from_files
-        rv = source_images_from_files.FilesFrameSource("testing/123", forever=True)
+        raise AttributeError("no input source has been specified")
 
     return rv
