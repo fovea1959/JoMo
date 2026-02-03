@@ -48,6 +48,7 @@
     "Python.configuration.executor": "Run",
     "Python.source_images_from_files.executor": "Run",
     "Python.test01.executor": "Run",
+    "Python.test02.executor": "Run",
     "Python.test_opencv.executor": "Run",
     "Python.test_piexif.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -74,7 +75,7 @@
       <recent name="$PROJECT_DIR$/testing/collected/skip" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.test02">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
@@ -141,7 +142,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test_opencv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test02" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,7 +155,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_opencv.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test02.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,11 +188,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test02" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.configuration" />
         <item itemvalue="Python.test_piexif" />
         <item itemvalue="Python.camera_finder" />
-        <item itemvalue="Python.test_opencv" />
       </list>
     </recent_temporary>
   </component>
@@ -347,7 +348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770049884543</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="We have (some) configuration">
+      <option name="closed" value="true" />
+      <created>1770057390204</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1770057390204</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -377,6 +386,7 @@
     <MESSAGE value="exif, latency, camera finder." />
     <MESSAGE value="Beef up gitignore." />
     <MESSAGE value="Start adding configuration" />
-    <option name="LAST_COMMIT_MESSAGE" value="Start adding configuration" />
+    <MESSAGE value="We have (some) configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="We have (some) configuration" />
   </component>
 </project>

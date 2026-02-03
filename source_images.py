@@ -35,7 +35,10 @@ def fetch_frame_source(source: str = None, **kwargs) -> FrameSource:
 
         if source.lower() == 'files':
             import source_images_from_files
-            rv = source_images_from_files.FilesFrameSource(forever=True, **kwargs)
+            # gotta force it. if we say forever = True the parameters list and 'forever' is in kwargs, then we get
+            # TypeError: ... got multiple values for keyword argument 'forever'
+            kwargs['forever'] = True
+            rv = source_images_from_files.FilesFrameSource(**kwargs)
 
     if rv is None:
         raise AttributeError("no input source has been specified")

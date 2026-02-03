@@ -7,6 +7,7 @@ import numpy as np
 import piexif
 import piexif.helper
 
+import configuration
 import motion_detectors
 import utilities
 
@@ -17,7 +18,8 @@ logger.setLevel(logging.INFO)
 
 class ChangeProcessor:
     def __init__(self):
-        self.motion_detector = motion_detectors.MotionDetector1(accumulate_alpha=0.5)  # PARAMETER!
+        motion_parameters = configuration.settings.get('motion', {})
+        self.motion_detector = motion_detectors.MotionDetector1(**motion_parameters)
 
         self.last_frame = None
         self.last_timestamp = None

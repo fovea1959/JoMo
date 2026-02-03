@@ -12,12 +12,15 @@ import utilities
 
 
 class FilesFrameSource(source_images.FrameSource):
-    def __init__(self, directory_path: str = None, extensions: list = None, log_level: int = logging.INFO, forever: bool = False):
+    def __init__(self, forever: bool = True, log_level: int = logging.INFO, directory: str = None, extensions: list = None):
         super().__init__(log_level)
+
+        if extensions is None:
+            extensions = ['.jpeg', '.jpg']
 
         self.forever = forever
 
-        p = Path(directory_path)
+        p = Path(directory)
         if extensions:
             file_paths = []
             for ext in extensions:
@@ -29,7 +32,7 @@ class FilesFrameSource(source_images.FrameSource):
         file_paths.sort()
         self.file_paths = file_paths
 
-        self.error_frame = self.make_error_frame(f"no valid images in {directory_path}")
+        self.error_frame = self.make_error_frame(f"no valid images in {directory}")
 
     @staticmethod
     def make_error_frame(text):

@@ -21,7 +21,7 @@ class MotionDetector1Result:
 class MotionDetector1:
     def __init__(self,
                  threshold: int = 25,
-                 accumulate_alpha: float = 0.2,
+                 accumulate_alpha: float = 0.5,
                  post_threshold_erode_iterations: int = 1,
                  blur_size: int = 3,
                  **kwargs):
@@ -69,5 +69,3 @@ class MotionDetector1:
             rv.derived_data_is_valid = True
 
         return rv
-
-
