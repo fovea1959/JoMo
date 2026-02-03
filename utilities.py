@@ -1,5 +1,5 @@
-import json
 from datetime import datetime, date
+import logging
 
 from PIL import Image
 import cv2
@@ -7,10 +7,18 @@ import numpy as np
 
 
 def make_pillow_from_cv2(cv2_image):
-    # Convert from BGR to RGB
-    cv2_image_rgb = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)
-    # Convert NumPy array to PIL Image object
-    pil_image = Image.fromarray(cv2_image_rgb)
+    if len(cv2_image.shape) == 2:
+        # it's mono
+        # doing this saved about 4% on file size.
+        pil_image = Image.fromarray(cv2_image)
+
+        if cv2_image.dtype == np.float64:
+            pil_image = pil_image.convert("L")
+    else:
+        # Convert from BGR to RGB
+        cv2_image_rgb = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)
+        # Convert NumPy array to PIL Image object
+        pil_image = Image.fromarray(cv2_image_rgb)
     return pil_image
 
 

@@ -369,7 +369,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770096498028</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="more more parameterization.">
+      <option name="closed" value="true" />
+      <created>1770134974070</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1770134974070</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -401,6 +409,7 @@
     <MESSAGE value="Start adding configuration" />
     <MESSAGE value="We have (some) configuration" />
     <MESSAGE value="more parameterization. is that a word?" />
-    <option name="LAST_COMMIT_MESSAGE" value="more parameterization. is that a word?" />
+    <MESSAGE value="more more parameterization." />
+    <option name="LAST_COMMIT_MESSAGE" value="more more parameterization." />
   </component>
 </project>

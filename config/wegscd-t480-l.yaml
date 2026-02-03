@@ -5,3 +5,9 @@ input:
   source: opencv-camera
   camera_name: Integrated
   resolution: [1280, 720]
+
+output:
+  save_delta: yes
+  save_eroded: yes
+  save_marked_up: yes
+  save_background: yes

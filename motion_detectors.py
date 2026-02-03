@@ -41,6 +41,7 @@ class MotionDetector1:
         # Initialize running average
         if self._background is None:
             self._background = gray.copy().astype("float")
+            rv.background = self._background.copy()
 
             height, width, channels = frame.shape
             fill_color = (255, 0, 0)
@@ -51,6 +52,8 @@ class MotionDetector1:
             rv.threshold = block
             rv.threshold_after_erode = block
         else:
+            rv.background = self._background.copy()
+
             # Update running average: weighted sum
             cv2.accumulateWeighted(gray, self._background, self._dp_accumulate_alpha)
             rv.background = self._background
