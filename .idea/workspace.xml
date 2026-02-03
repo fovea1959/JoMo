@@ -75,7 +75,7 @@
       <recent name="$PROJECT_DIR$/testing/collected/skip" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test02">
+  <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
@@ -188,8 +188,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test02" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.test02" />
         <item itemvalue="Python.configuration" />
         <item itemvalue="Python.test_piexif" />
         <item itemvalue="Python.camera_finder" />
@@ -356,7 +356,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770057390204</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="more parameterization. is that a word?">
+      <option name="closed" value="true" />
+      <created>1770096237268</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1770096237268</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -387,6 +395,7 @@
     <MESSAGE value="Beef up gitignore." />
     <MESSAGE value="Start adding configuration" />
     <MESSAGE value="We have (some) configuration" />
-    <option name="LAST_COMMIT_MESSAGE" value="We have (some) configuration" />
+    <MESSAGE value="more parameterization. is that a word?" />
+    <option name="LAST_COMMIT_MESSAGE" value="more parameterization. is that a word?" />
   </component>
 </project>
