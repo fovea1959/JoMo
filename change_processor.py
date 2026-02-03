@@ -120,7 +120,7 @@ class ChangeProcessor:
         color = (0, 0, 255)  # White color (BGR)
         thickness = 1
 
-        text_size, baseline = cv2.getTextSize(text, font, font_scale, thickness)
+        # text_size, baseline = cv2.getTextSize(text, font, font_scale, thickness)
         # text_width, text_height = text_size
 
         text_x = int(width * 0.1)

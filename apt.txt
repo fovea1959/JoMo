@@ -9,8 +9,6 @@ apt install libcamera-dev
 
 libcamera-dev could not be built at this time because it didn't know about the version of libcamera that was installed on my new Trixie, so I backed off and when with the system packages:
 
-
-
 if using system
 apt install python3-piexif
 apt install python3-picamera2

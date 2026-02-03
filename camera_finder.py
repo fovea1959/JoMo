@@ -1,6 +1,5 @@
 import sys
 
-import cv2
 import cv2_enumerate_cameras.camera_info
 
 import logging
@@ -9,6 +8,8 @@ from cv2_enumerate_cameras import enumerate_cameras
 from cv2.videoio_registry import getBackendName
 
 logger = logging.getLogger("get_camera")
+
+
 def get_camera(name : str):
     i_want = None
 

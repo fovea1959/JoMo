@@ -15,7 +15,7 @@ logger.setLevel(logging.INFO)
 
 
 class OpenCVCameraImageSource(source_images.FrameSource):
-    def __init__(self, log_level: int = logging.INFO, camera_name: str = None, resolution = None, **kwargs):
+    def __init__(self, log_level: int = logging.INFO, camera_name: str = None, resolution=None, **kwargs):
         super().__init__(log_level)
         camera_id, backend = camera_finder.get_camera(camera_name)
         if camera_id is None:
@@ -29,11 +29,10 @@ class OpenCVCameraImageSource(source_images.FrameSource):
         # Get frame width and height
         width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        logger.info("Using camera %d from backend %s @ %s", camera_id, camera_finder.getBackendName(backend), f"{width}x{height}")
-        # reduce # of buffers so we don't need to flush so many
+        logger.info("Using camera %d from backend %s @ %s",
+                    camera_id, camera_finder.getBackendName(backend), f"{width}x{height}")
+        # reduce # of buffers, so we don't need to flush so many
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-
-
 
     def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
         """

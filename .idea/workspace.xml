@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87610aa0-d093-4712-a93e-80dd6b35d385" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/JoMo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/JoMo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YieldImageFrames.py" beforeDir="false" afterPath="$PROJECT_DIR$/YieldImageFrames.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,35 +32,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.MotionDetector.executor": "Run",
-    "Python.TestMotionsDetectorAgainstTestData.executor": "Run",
-    "Python.Test_Streaming.executor": "Run",
-    "Python.Test_Webcam.executor": "Run",
-    "Python.YieldImageFrames.executor": "Run",
-    "Python.app.executor": "Run",
-    "Python.camera_finder.executor": "Run",
-    "Python.configuration.executor": "Run",
-    "Python.source_images_from_files.executor": "Run",
-    "Python.test01.executor": "Run",
-    "Python.test02.executor": "Run",
-    "Python.test_opencv.executor": "Run",
-    "Python.test_piexif.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/wegscd/PycharmProjects/JoMo/config",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.MotionDetector.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TestMotionsDetectorAgainstTestData.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Test_Streaming.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Test_Webcam.executor&quot;: &quot;Run&quot;,
+    &quot;Python.YieldImageFrames.executor&quot;: &quot;Run&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.camera_finder.executor&quot;: &quot;Run&quot;,
+    &quot;Python.configuration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.source_images_from_files.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test01.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test02.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_opencv.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_piexif.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/wegscd/PycharmProjects/JoMo/config&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "GitStage.ChangesTree.GroupingKeys": [
-      "directory",
-      "module",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/config" />
@@ -364,7 +361,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770096237268</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="more parameterization. is that a word?">
+      <option name="closed" value="true" />
+      <created>1770096498028</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1770096498028</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
