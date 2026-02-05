@@ -28,14 +28,14 @@ def source():
     logger.info("Image source created")
 
     cp = change_processor.ChangeProcessor()
-    while True:
-        for frame_and_info in frame_source.yield_opencv_image_frames():
-            frame, info = frame_and_info
-            logger.debug("got image %s", info)
-            mrt = cp.process_frame(frame, info)
-            logger.debug("source yielding %s", mrt)
-            yield mrt
-            time.sleep(delay)
+
+    for frame_and_info in frame_source.yield_opencv_image_frames():
+        frame, info = frame_and_info
+        logger.debug("got image %s", info)
+        mrt = cp.process_frame(frame, info)
+        logger.debug("source yielding %s", mrt)
+        yield mrt
+        time.sleep(delay)
 
 
 logging.info("Creating distributor")

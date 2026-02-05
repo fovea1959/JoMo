@@ -105,8 +105,10 @@ class FilesFrameSource(source_images.FrameSource):
 
             if not self.forever:
                 self.logger.info ("all files are read!")
-                while True:
-                    time.sleep(60)
+                break
+
+        self.logger.info("exiting yield_pillow_image_frames")
+
 
 
 # Example Usage:
