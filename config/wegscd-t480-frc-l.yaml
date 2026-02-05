@@ -1,0 +1,13 @@
+info:
+  node: wegscd-t480-frc-l
+
+input:
+  source: files
+  directory: testing/collected/20260204_test
+  delay: 1
+
+output:
+  save_delta: yes
+  save_eroded: yes
+  save_marked_up: yes
+  save_background: yes

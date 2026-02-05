@@ -22,6 +22,7 @@ def source():
     logger = logging.getLogger("source")
     logger.setLevel(logging.INFO)
     input_args = configuration.settings.get('input', {})
+    delay = input_args.get('delay', 10)
     logger.info("Creating image source with %s", input_args)
     frame_source = source_images.fetch_frame_source(**input_args)
     logger.info("Image source created")
@@ -34,7 +35,7 @@ def source():
             mrt = cp.process_frame(frame, info)
             logger.debug("source yielding %s", mrt)
             yield mrt
-            time.sleep(10)  # PARAMETER!
+            time.sleep(delay)
 
 
 logging.info("Creating distributor")

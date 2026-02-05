@@ -1,7 +1,10 @@
+import datetime
 import logging
+import re
 
 from pathlib import Path
 from typing import Generator, Tuple, Dict
+from zoneinfo import ZoneInfo
 
 import cv2
 from PIL import Image
@@ -12,7 +15,7 @@ import utilities
 
 
 class FilesFrameSource(source_images.FrameSource):
-    def __init__(self, forever: bool = True, log_level: int = logging.INFO, directory: str = None, extensions: list = None):
+    def __init__(self, forever: bool = True, log_level: int = logging.INFO, directory: str = None, extensions: list = None, **kwargs):
         super().__init__(log_level)
 
         if extensions is None:
@@ -65,6 +68,8 @@ class FilesFrameSource(source_images.FrameSource):
         An image frame as a opencv image.
         """
         self.logger.info("starting yield_pillow_image_frames")
+        date_re = re.compile(r"(\d{8}-\d{6})\.")
+        local_tz = ZoneInfo('localtime')
         while True:
             yielded_something = False
             for file_path in self.file_paths:
@@ -72,8 +77,15 @@ class FilesFrameSource(source_images.FrameSource):
                     try:
                         # Open the image using Pillow (PIL)
                         with Image.open(file_path) as img:
-                            self.logger.debug("yielding image %s", file_path)
-                            yield utilities.make_cv2_from_pillow(img), {'path': file_path}
+                            info = {'path': file_path}
+                            m = date_re.search(str(file_path))
+                            if m:
+                                dt_s = m.group(1)
+                                dt = datetime.datetime.strptime(dt_s, '%Y%m%d-%H%M%S')
+                                dt = dt.astimezone(local_tz)
+                                info['timestamp'] = dt
+                            self.logger.debug("yielding image %s %s", file_path, info)
+                            yield utilities.make_cv2_from_pillow(img), info
                             yielded_something = True
                     except IOError:
                         # Handle cases where a file might not be a valid image
@@ -94,7 +106,7 @@ if __name__ == '__main__':
     # Specify extensions if needed, or leave as None to attempt opening all files
     valid_extensions = ['.png', '.jpg', '.jpeg']
 
-    image_source = FilesFrameSource(image_dir, valid_extensions)
+    image_source = FilesFrameSource(directory = image_dir, extensions = valid_extensions)
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(image_source.yield_opencv_image_frames()):

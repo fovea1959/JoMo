@@ -1,5 +1,6 @@
 from datetime import datetime, date
-import logging
+import json
+from pathlib import PosixPath, Path
 
 from PIL import Image
 import cv2
@@ -127,4 +128,10 @@ def json_serializer(obj):
     """JSON serializer for objects not serializable by default json code"""
     if isinstance(obj, (datetime, date)):
         return obj.isoformat() # Converts to ISO 8601 format (e.g., "YYYY-MM-DDTHH:MM:SS")
+    if isinstance(obj, (PosixPath, Path)):
+        return str(obj)
     raise TypeError(f"Type {type(obj).__name__} not serializable")
+
+
+def compact_json(obj):
+    return json.dumps(obj, indent=None, separators=(',', ':'), sort_keys=True, default=json_serializer)

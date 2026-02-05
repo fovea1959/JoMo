@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87610aa0-d093-4712-a93e-80dd6b35d385" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/make_movie.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/JoMo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/JoMo.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source_images_from_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/source_images_from_files.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,44 +28,57 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;fovea1959&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/fovea1959/JoMo.git&quot;,
+    &quot;accountId&quot;: &quot;5160b2a5-dc91-4a8c-a73d-6554d43b7658&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="38fRj1RRobZDFS0hXO147EvkRSw" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.MotionDetector.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TestMotionsDetectorAgainstTestData.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Test_Streaming.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Test_Webcam.executor&quot;: &quot;Run&quot;,
-    &quot;Python.YieldImageFrames.executor&quot;: &quot;Run&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;Python.camera_finder.executor&quot;: &quot;Run&quot;,
-    &quot;Python.configuration.executor&quot;: &quot;Run&quot;,
-    &quot;Python.source_images_from_files.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test01.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test02.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_opencv.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_piexif.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/wegscd/PycharmProjects/JoMo/config&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.MotionDetector.executor": "Run",
+    "Python.TestMotionsDetectorAgainstTestData.executor": "Run",
+    "Python.Test_Streaming.executor": "Run",
+    "Python.Test_Webcam.executor": "Run",
+    "Python.YieldImageFrames.executor": "Run",
+    "Python.app.executor": "Run",
+    "Python.camera_finder.executor": "Run",
+    "Python.configuration.executor": "Run",
+    "Python.make_movie.executor": "Run",
+    "Python.source_images_from_files.executor": "Run",
+    "Python.test01.executor": "Run",
+    "Python.test02.executor": "Run",
+    "Python.test_opencv.executor": "Run",
+    "Python.test_piexif.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/wegscd/JoMo",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
-      &quot;directory&quot;,
-      &quot;module&quot;,
-      &quot;repository&quot;
+  "keyToStringList": {
+    "GitStage.ChangesTree.GroupingKeys": [
+      "directory",
+      "module",
+      "repository"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/config" />
@@ -72,7 +90,7 @@
       <recent name="$PROJECT_DIR$/testing/collected/skip" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.make_movie">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
@@ -87,28 +105,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="camera_finder" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="JoMo" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/camera_finder.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -183,20 +179,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.make_movie" />
+      <item itemvalue="Python.app" />
+      <item itemvalue="Python.configuration" />
+      <item itemvalue="Python.test02" />
+      <item itemvalue="Python.test_piexif" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.make_movie" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.test02" />
         <item itemvalue="Python.configuration" />
         <item itemvalue="Python.test_piexif" />
-        <item itemvalue="Python.camera_finder" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
+        <option value="bundled-python-sdk-dfff61a61320-9cdd278e9d02-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.25410.159" />
       </set>
     </attachedChunks>
   </component>
@@ -411,5 +414,16 @@
     <MESSAGE value="more parameterization. is that a word?" />
     <MESSAGE value="more more parameterization." />
     <option name="LAST_COMMIT_MESSAGE" value="more more parameterization." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/source_images_from_files.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
