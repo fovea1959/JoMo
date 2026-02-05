@@ -68,17 +68,22 @@ class Receiver:
         logger.info("creating %s", self)
         self.distributor = distributor
 
+        self.first_time = True
+
         distributor.start_background_thread()
 
     def get_last_result(self):
         """Return the current camera frame."""
         self.distributor.last_access = time.time()
 
-        # wait for a signal from the camera thread
-        ev_logger.debug("waiting for Distributor.event")
-        self.distributor.event.wait()
-        ev_logger.debug("got Distributor.event")
-        self.distributor.event.clear()
+        if self.distributor.last_result is None or not self.first_time:
+            # wait for a signal from the camera thread
+            ev_logger.debug("waiting for Distributor.event")
+            self.distributor.event.wait()
+            ev_logger.debug("got Distributor.event")
+            self.distributor.event.clear()
+
+        self.first_time = False
 
         rv = self.distributor.last_result
         logger.debug("returning %s %s", type(rv), rv)
