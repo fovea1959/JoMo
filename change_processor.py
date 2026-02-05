@@ -36,6 +36,8 @@ class ChangeProcessor:
         self.save_eroded = output_parameters.get('save_eroded', False)
         self.save_marked_up = output_parameters.get('save_marked_up', False)
         self.save_background = output_parameters.get('save_background', False)
+        self.do_draw_contours = output_parameters.get('draw_contours', True)
+        self.do_draw_boxes = output_parameters.get('draw_boxes', False)
 
     def process_frame(self, frame, info):
         timestamp = info.get('timestamp')
@@ -69,11 +71,11 @@ class ChangeProcessor:
                 (x, y, w, h) = cv2.boundingRect(contour)
                 boxes.append((x, y, w, h))
                 if self.save_marked_up:
-                    cv2.drawContours(frame2, contours, -1, (0, 255, 0), 1)
+                    if self.do_draw_contours:
+                        cv2.drawContours(frame2, contours, -1, (0, 255, 0), 1)
 
-                    if hit:
-                        # cv2.rectangle(frame2, (x, y), (x + w, y + h), (255, 255, 0), 1)
-                        pass
+                    if hit and self.do_draw_boxes:
+                        cv2.rectangle(frame2, (x, y), (x + w, y + h), (255, 255, 0), 1)
         else:
             mrt.contour_area_ratio = 0
             mrt.thresholded_area_ratio = 0
@@ -207,6 +209,6 @@ class ChangeProcessor:
         if one_bit:
             # this does not help with JPEG output, but leaving it in
             pil_image = pil_image.convert("1", dither=Image.Dither.NONE)
-        logging.info("cv2 image %s %s -> pillow image %s %s", frame.shape, frame.dtype, pil_image.size,
+        logger.debug("cv2 image %s %s -> pillow image %s %s", frame.shape, frame.dtype, pil_image.size,
                      pil_image.mode)
         pil_image.save(f'{self.output_directory}/{fn}{suffix}.jpg', exif=exif_bytes, quality=95)
