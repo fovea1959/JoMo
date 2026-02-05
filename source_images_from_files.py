@@ -1,9 +1,10 @@
 import datetime
 import logging
 import re
+import time
 
 from pathlib import Path
-from typing import Generator, Tuple, Dict
+from typing import Generator, Tuple, Dict, Iterable
 from zoneinfo import ZoneInfo
 
 import cv2
@@ -15,22 +16,29 @@ import utilities
 
 
 class FilesFrameSource(source_images.FrameSource):
-    def __init__(self, forever: bool = True, log_level: int = logging.INFO, directory: str = None, extensions: list = None, **kwargs):
+    def __init__(self, forever: bool = True, log_level: int | str = logging.INFO, directory: str = None,
+                 glob : Iterable[str] | str = '*', strict_args = True, **kwargs):
         super().__init__(log_level)
 
-        if extensions is None:
-            extensions = ['.jpeg', '.jpg']
+        if strict_args and len(kwargs) > 0:
+            raise TypeError(f"unexpected arguments: {kwargs}")
+
+        # https://stackoverflow.com/a/1952481
+        globs = [ ]
+
+        if type(glob) == str:
+            globs.append(glob)
+        else:
+            for g in glob:
+                globs.append(g)
 
         self.forever = forever
 
         p = Path(directory)
-        if extensions:
-            file_paths = []
-            for ext in extensions:
-                # Use rglob for recursive search, glob for single log_level
-                file_paths.extend(list(p.glob(f'*{ext}')))
-        else:
-            file_paths = list(p.glob('*'))  # Iterate through all files
+        file_paths = []
+        for g in globs:
+            print(g)
+            file_paths.extend(list(p.glob(g)))
 
         file_paths.sort()
         self.file_paths = file_paths
@@ -96,7 +104,9 @@ class FilesFrameSource(source_images.FrameSource):
                 yield self.error_frame, {'path': '** error frame **'}
 
             if not self.forever:
-                break
+                self.logger.info ("all files are read!")
+                while True:
+                    time.sleep(60)
 
 
 # Example Usage:
@@ -106,9 +116,9 @@ if __name__ == '__main__':
     # Specify extensions if needed, or leave as None to attempt opening all files
     valid_extensions = ['.png', '.jpg', '.jpeg']
 
-    image_source = FilesFrameSource(directory = image_dir, extensions = valid_extensions)
+    image_source = FilesFrameSource(directory=image_dir, extensions=valid_extensions)
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(image_source.yield_opencv_image_frames()):
         frame, info = frame_and_info
-        print(f"Processing frame {i+1} {info}: Shape {frame.shape}, Data Type {frame.dtype}")
+        print(f"Processing frame {i + 1} {info}: Shape {frame.shape}, Data Type {frame.dtype}")

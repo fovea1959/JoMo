@@ -15,8 +15,13 @@ logger.setLevel(logging.INFO)
 
 
 class OpenCVCameraImageSource(source_images.FrameSource):
-    def __init__(self, log_level: int = logging.INFO, camera_name: str = None, resolution=None, **kwargs):
+    def __init__(self, log_level: int | str = logging.INFO, camera_name: str = None, resolution=None, strict_args=True,
+                 **kwargs):
         super().__init__(log_level)
+
+        if strict_args and len(kwargs) > 0:
+            raise TypeError(f"unexpected arguments: {kwargs}")
+
         camera_id, backend = camera_finder.get_camera(camera_name)
         if camera_id is None:
             raise Exception(f"Cannot find camera {camera_name}")

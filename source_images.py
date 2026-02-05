@@ -13,9 +13,15 @@ import utilities
 
 
 class FrameSource:
-    def __init__(self, log_level: int = logging.INFO):
+    def __init__(self, log_level: int | str = logging.INFO):
         self.logger = logging.getLogger(str(type(self)))
-        self.logger.setLevel(log_level)
+        ll = log_level
+        if type(log_level) == str:
+            ll = logging.getLevelNamesMapping().get(log_level.upper())
+            if ll is None:
+                self.logger.error("cannot set logging level to '%s'", log_level)
+                ll = logging.INFO
+        self.logger.setLevel(ll)
 
     def yield_opencv_image_frames(self) -> Generator[Tuple[np.ndarray, Dict], None, None]:
         pass
@@ -27,18 +33,15 @@ def fetch_frame_source(source: str = None, **kwargs) -> FrameSource:
     if source is not None:
         if source.lower() == 'picamera':
             import source_images_from_picamera2
-            rv = source_images_from_picamera2.PiCamera2FrameSource(**kwargs)
+            rv = source_images_from_picamera2.PiCamera2FrameSource(strict_args = False, **kwargs)
 
         if source.lower() == 'opencv-camera':
             import source_images_from_opencv_camera
-            rv = source_images_from_opencv_camera.OpenCVCameraImageSource(**kwargs)
+            rv = source_images_from_opencv_camera.OpenCVCameraImageSource(strict_args = False, **kwargs)
 
         if source.lower() == 'files':
             import source_images_from_files
-            # gotta force it. if we say forever = True the parameters list and 'forever' is in kwargs, then we get
-            # TypeError: ... got multiple values for keyword argument 'forever'
-            kwargs['forever'] = True
-            rv = source_images_from_files.FilesFrameSource(**kwargs)
+            rv = source_images_from_files.FilesFrameSource(strict_args = False, **kwargs)
 
     if rv is None:
         raise AttributeError("no input source has been specified")

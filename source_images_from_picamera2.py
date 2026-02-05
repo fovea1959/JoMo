@@ -17,8 +17,12 @@ logger.setLevel(logging.INFO)
 
 
 class PiCamera2FrameSource(source_images.FrameSource):
-    def __init__(self, log_level: int = logging.INFO, vflip: bool = None, hflip: bool = None, resolution=None, **kwargs):
+    def __init__(self, log_level: int | str = logging.INFO, vflip: bool = None, hflip: bool = None, resolution=None, strict_args = True, **kwargs):
         super().__init__(log_level)
+
+        if strict_args and len(kwargs) > 0:
+            raise TypeError(f"unexpected arguments: {kwargs}")
+
         self.picam2 = Picamera2()
 
         capture_config_parameters = {}

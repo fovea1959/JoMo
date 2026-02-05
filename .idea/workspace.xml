@@ -4,13 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87610aa0-d093-4712-a93e-80dd6b35d385" name="Changes" comment="">
+    <list default="true" id="87610aa0-d093-4712-a93e-80dd6b35d385" name="Changes" comment="Working on movies for testing">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/app.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/make_movie.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/test.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/make_movie.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/JoMo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/JoMo.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_pathlib_glob.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestMotionsDetectorAgainstTestData.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestMotionsDetectorAgainstTestData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/change_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/change_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/distributor.py" beforeDir="false" afterPath="$PROJECT_DIR$/distributor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/motion_detectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/motion_detectors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source_images.py" beforeDir="false" afterPath="$PROJECT_DIR$/source_images.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source_images_from_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/source_images_from_files.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source_images_from_opencv_camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/source_images_from_opencv_camera.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source_images_from_picamera2.py" beforeDir="false" afterPath="$PROJECT_DIR$/source_images_from_picamera2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,19 +65,23 @@
     "Python.Test_Streaming.executor": "Run",
     "Python.Test_Webcam.executor": "Run",
     "Python.YieldImageFrames.executor": "Run",
+    "Python.app (testing).executor": "Debug",
     "Python.app.executor": "Run",
     "Python.camera_finder.executor": "Run",
     "Python.configuration.executor": "Run",
+    "Python.make_movie (output, -markedup).executor": "Run",
     "Python.make_movie.executor": "Run",
     "Python.source_images_from_files.executor": "Run",
     "Python.test01.executor": "Run",
     "Python.test02.executor": "Run",
     "Python.test_opencv.executor": "Run",
+    "Python.test_pathlib_glob.executor": "Run",
     "Python.test_piexif.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/wegscd/JoMo",
+    "last_opened_file_path": "/home/wegscd/JoMo/testing/collected/short",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   },
   "keyToStringList": {
@@ -81,23 +94,26 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testing/collected/short" />
       <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testing/collected/glob_test" />
       <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/testing/123" />
       <recent name="$PROJECT_DIR$/testing/collected/skip" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.make_movie">
-    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.app (testing)">
+    <configuration name="app (testing)" type="PythonConfigurationType" factoryName="Python">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="JOMO_CONFIG" value="config/test.yaml" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -135,6 +151,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="make_movie (output, -markedup)" type="PythonConfigurationType" factoryName="Python">
+      <module name="JoMo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/make_movie.py" />
+      <option name="PARAMETERS" value="--dir output --output=output_markedup.mp4 --markup --glob=*-markedup.jp*" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test02" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoMo" />
       <option name="ENV_FILES" value="" />
@@ -149,6 +187,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test02.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_pathlib_glob" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="JoMo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_pathlib_glob.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -181,18 +241,21 @@
     </configuration>
     <list>
       <item itemvalue="Python.make_movie" />
+      <item itemvalue="Python.make_movie (output, -markedup)" />
+      <item itemvalue="Python.test_pathlib_glob" />
       <item itemvalue="Python.app" />
+      <item itemvalue="Python.app (testing)" />
       <item itemvalue="Python.configuration" />
       <item itemvalue="Python.test02" />
       <item itemvalue="Python.test_piexif" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test_pathlib_glob" />
         <item itemvalue="Python.make_movie" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.test02" />
         <item itemvalue="Python.configuration" />
-        <item itemvalue="Python.test_piexif" />
       </list>
     </recent_temporary>
   </component>
@@ -380,7 +443,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770134974070</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Working on movies for testing">
+      <option name="closed" value="true" />
+      <created>1770313836015</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1770313836015</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -413,15 +484,26 @@
     <MESSAGE value="We have (some) configuration" />
     <MESSAGE value="more parameterization. is that a word?" />
     <MESSAGE value="more more parameterization." />
-    <option name="LAST_COMMIT_MESSAGE" value="more more parameterization." />
+    <MESSAGE value="Working on movies for testing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on movies for testing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/source_images_from_files.py</url>
-          <line>81</line>
-          <option name="timeStamp" value="2" />
+          <line>18</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/distributor.py</url>
+          <line>94</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/distributor.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

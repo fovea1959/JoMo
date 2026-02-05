@@ -24,7 +24,12 @@ class MotionDetector1:
                  accumulate_alpha: float = 0.5,
                  post_threshold_erode_iterations: int = 1,
                  blur_size: int = 3,
+                 strict_args = True,
                  **kwargs):
+
+        if strict_args and len(kwargs) > 0:
+            raise TypeError(f"unexpected arguments: {kwargs}")
+
         self._background = None
         self._dp_threshold = threshold
         self._dp_accumulate_alpha = accumulate_alpha

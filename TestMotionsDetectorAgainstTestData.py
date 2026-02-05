@@ -6,7 +6,7 @@ import numpy
 import numpy as np
 
 import motion_detectors
-import source_images_from_directory
+import source_images_from_files
 
 
 def main():
@@ -18,10 +18,8 @@ def main():
 
     # Replace 'your_image_directory' with the path to your image folder
     image_dir = 'testing/collected'
-    # Specify extensions if needed, or leave as None to attempt opening all files
-    valid_extensions = ['.png', '.jpg', '.jpeg']
 
-    frame_source = source_images_from_directory.SourceImagesFromFiles(image_dir, valid_extensions)
+    frame_source = source_images_from_files.FilesFrameSource(directory=image_dir, glob='*.jp*')
 
     # Iterate through the image frames using the generator
     for i, frame_and_info in enumerate(frame_source.yield_opencv_image_frames()):
