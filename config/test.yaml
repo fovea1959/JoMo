@@ -1,0 +1,16 @@
+input:
+  source: files
+  # directory: testing/collected/20260204_test
+  directory: testing/collected/short
+  delay: 0.01
+  forever: no
+  log_level: debug
+
+output:
+  save_delta: no
+  save_eroded: no
+  save_marked_up: yes
+  save_background: no
+
+  draw_contours: no
+  draw_boxes: yes

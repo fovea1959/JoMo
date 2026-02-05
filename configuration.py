@@ -1,5 +1,6 @@
 import configparser
 import logging
+import os
 import os.path
 import platform
 import sys
@@ -35,17 +36,25 @@ def merge(a: dict, b: dict, path=None, allow_override: bool = True):
 def configure():
     global settings
 
-    uname = platform.uname()
-    machine = uname[4] + ('-rpi' if '-rpi-' in uname[2].lower() else '')
-    # platform (Linux, etc), machine(aarch, x86_64), node)
-    for filename_name in ('platform.' + uname[0], 'machine.' + machine, uname[1]):
-        full_filename = f'config/{filename_name.lower()}.yaml'
-        if os.path.isfile(full_filename):
-            with open(full_filename, 'r') as yaml_file:
+    env_config_file = os.getenv('JOMO_CONFIG')
+    if env_config_file is None:
+        uname = platform.uname()
+        machine = uname[4] + ('-rpi' if '-rpi-' in uname[2].lower() else '')
+        # platform (Linux, etc), machine(aarch, x86_64), node)
+        config_files = ('config/platform.' + uname[0].lower() + ".yaml", 'config/machine.' + machine.lower() + ".yaml",
+                        "config/" + uname[1].lower() + ".yaml")
+    else:
+        config_files = (env_config_file,)
+
+    for config_filename in config_files:
+        if os.path.isfile(config_filename):
+            with open(config_filename, 'r') as yaml_file:
                 s1 = yaml.safe_load(yaml_file)
-                logger.debug("%s yielded %s", full_filename, s1)
+                logger.debug("%s yielded %s", config_filename, s1)
                 settings = merge(settings, s1)
                 logger.debug("settings are now %s", settings)
+        else:
+            logger.error("%s is not a file", config_filename)
 
 
 if __name__ == '__main__':
